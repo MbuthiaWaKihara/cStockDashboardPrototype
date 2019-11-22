@@ -271,9 +271,8 @@ const ValueVsCommodity = ({endpoint, name}) => {
                     let R = Math.floor(Math.random() * 255 ) + 1;
                     let G = Math.floor(Math.random() * 255 ) + 1;
                     let B = Math.floor(Math.random() * 255 ) + 1;
-                    let opacity = Math.floor(Math.random() * 5 ) + 1;
 
-                    dataSet.backgroundColor = `rgba(${R}, ${G}, ${B}, ${opacity})`;
+                    dataSet.backgroundColor = `rgb(${R}, ${G}, ${B})`;
 
                     dataSetsDuplicate = [...dataSetsDuplicate, dataSet];
                     dataSet = {label: [], data: [], backgroundColor: ''};

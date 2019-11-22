@@ -72,10 +72,10 @@ const TypeVsPeriod = () =>
         }, [rows]
     );
 
-     //state variable that holds sorted rows per org
+     //state variable that holds sorted rows per report
      const [sortedRowsPerReport, setSortedRowsPerReport] = useState([]);
 
-     //sort the rows per org by month from earliest to latest
+     //sort the rows per report by month from earliest to latest
      useEffect(
          () => {
              let rowsPerReportDuplicate = [...rowsPerReport];
@@ -124,7 +124,7 @@ const TypeVsPeriod = () =>
                 report => {
                     report.forEach(
                         reportRow => {
-                            currentRates = [...currentRates, reportRow[2]];
+                            currentRates = [...currentRates, reportRow[3]];
                         }
                     );
 
@@ -237,7 +237,7 @@ const TypeVsPeriod = () =>
                     let B = Math.floor(Math.random() * 255 ) + 1;
                     let opacity = Math.floor(Math.random() * 5 ) + 1;
 
-                    dataSet.backgroundColor = `rgba(${R}, ${G}, ${B}, ${opacity})`;
+                    dataSet.backgroundColor = `rgba(${R}, ${G}, ${B}, .${opacity})`;
 
                     dataSetsDuplicate = [...dataSetsDuplicate, dataSet];
                     dataSet = {label: [], data: [], backgroundColor: ''};
@@ -261,6 +261,10 @@ const TypeVsPeriod = () =>
         },
       }
 
+    console.log("all data:", allData);
+    console.log("rows", rows);
+    console.log("sorted rows:", sortedRowsPerReport);
+    console.log("rates per report:", ratesPerReport);
     return(
         <>
             <Line
