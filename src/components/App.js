@@ -146,8 +146,32 @@ const App = () =>
                         padding: '5px',
                     }}>
                     <TypeVsPeriod 
-                        endpoint={`26/analytics.json?dimension=dx:z2slLbjn7PM.EXPECTED_REPORTS;z2slLbjn7PM.ACTUAL_REPORTS;z2slLbjn7PM.ACTUAL_REPORTS_ON_TIME&dimension=pe:LAST_6_MONTHS&filter=ou:USER_ORGUNIT&displayProperty=NAME&user=Fsw9jvRNAGL&outputIdScheme=UID`}
+                        endpoint={`26/analytics.json?dimension=dx:ozYIEpvgLnb.EXPECTED_REPORTS;ozYIEpvgLnb.ACTUAL_REPORTS;ozYIEpvgLnb.ACTUAL_REPORTS_ON_TIME&dimension=pe:LAST_12_MONTHS&filter=ou:USER_ORGUNIT&displayProperty=NAME&user=Fsw9jvRNAGL&outputIdScheme=UID`}
                         range="12"
+                        display="table"
+                    />
+                    </div>
+            </div>
+       </div>
+       <div className="container container-fluid">
+             <div style={{
+                width: '100%',
+                heigth: '100%'
+                }}>
+                    <div style={{
+                        borderLeft: '1px solid #575859',
+                        borderBottom: '2px solid #575859',
+                        borderRadius: '5px',
+                        width: '100%',
+                        height: '100%',
+                        margin: '10px',
+                        backgroundColor: '#ffffff',
+                        padding: '5px',
+                    }}>
+                    <TypeVsPeriod 
+                        endpoint={`26/analytics.json?dimension=dx:ozYIEpvgLnb.EXPECTED_REPORTS;ozYIEpvgLnb.ACTUAL_REPORTS;ozYIEpvgLnb.ACTUAL_REPORTS_ON_TIME&dimension=pe:LAST_12_MONTHS&filter=ou:USER_ORGUNIT&displayProperty=NAME&user=Fsw9jvRNAGL&outputIdScheme=UID`}
+                        range="12"
+                        display="chart"
                     />
                     </div>
             </div>
@@ -170,8 +194,32 @@ const App = () =>
                         padding: '5px',
                     }}>
                         <ValueVsCommodity
-                        endpoint={`26/analytics.json?dimension=dx:Sb51kbfB5pZ;nRF6iAawMUQ;hzDGo5nqjfH;nt54bcq9NQT;KFHneeBlqlg;kXVqr26t8Gw;fmjRhjO45FQ;UQpO4EcgrIN;Y5fpEJ7f0Hs;vzQkdDBreBo;JT43z2pnLtC;T2ivg5iNkIt;fLZe90RKZdJ;pBizBK6cxTU;alNOqvIBVMI;IQtIhSffFeY;fig2PxDEVb7;uf2s8KKvQCk&dimension=ou:USER_ORGUNIT&dimension=pe:LAST_MONTH&displayProperty=NAME&user=Fsw9jvRNAGL&outputIdScheme=UID`}
-                        name="CHV Dispensed"
+                        endpoint={`26/analytics.json?dimension=dx:FCGlV1DQoAr;AEyG1X4kXnz;CVXGPFXfDLt;AkfJMdfCrbJ;roMeWQc8WTX;VR59AR3RUPQ;BnpkT4ScE1F;wXclU7457Qr;wUdZH6IZpPp;DlnVv9U3rSO;ZtXCsKknDTp;Gkcyqi8tjqK;T7OyqQpUpNd;dRPpmZImtz2;KRtf2dhfDVQ;yLMUqHSThLa;QYY98SdCtTJ;VyNUFZhD89j&dimension=ou:USER_ORGUNIT&dimension=pe:LAST_MONTH&displayProperty=NAME&user=Fsw9jvRNAGL&outputIdScheme=UID`}
+                        name="CHV Stock on Hand"
+                        display="table"
+                        />
+                    </div>
+            </div>
+       </div>
+       <div className="container container-fluid">
+            <div style={{
+                width: '100%',
+                heigth: '100%'
+                }}>
+                    <div style={{
+                        borderLeft: '1px solid #575859',
+                        borderBottom: '2px solid #575859',
+                        borderRadius: '5px',
+                        width: '100%',
+                        height: '100%',
+                        margin: '10px',
+                        backgroundColor: '#ffffff',
+                        padding: '5px',
+                    }}>
+                        <ValueVsCommodity
+                        endpoint={`26/analytics.json?dimension=dx:FCGlV1DQoAr;AEyG1X4kXnz;CVXGPFXfDLt;AkfJMdfCrbJ;roMeWQc8WTX;VR59AR3RUPQ;BnpkT4ScE1F;wXclU7457Qr;wUdZH6IZpPp;DlnVv9U3rSO;ZtXCsKknDTp;Gkcyqi8tjqK;T7OyqQpUpNd;dRPpmZImtz2;KRtf2dhfDVQ;yLMUqHSThLa;QYY98SdCtTJ;VyNUFZhD89j&dimension=ou:USER_ORGUNIT&dimension=pe:LAST_MONTH&displayProperty=NAME&user=Fsw9jvRNAGL&outputIdScheme=UID`}
+                        name="CHV Stock on Hand"
+                        display="chart"
                         />
                     </div>
             </div>

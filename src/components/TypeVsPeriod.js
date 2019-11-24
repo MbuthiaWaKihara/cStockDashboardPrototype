@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 
-const TypeVsPeriod = ({endpoint, range}) =>
+const TypeVsPeriod = ({endpoint, range, display}) =>
 {
     //state variable to hold all incoming data from dhis
     const [allData, setAllData] = useState({});
@@ -31,6 +31,8 @@ const TypeVsPeriod = ({endpoint, range}) =>
     const [periods, setPeriods] = useState([]);
     //state variable that holds the original rows
     const [rows, setRows] = useState([]);
+    //state variable that holds the org units
+    const [orgUnits, setOrgUnits] = useState([]);
 
     //populate the above variables
     useEffect(
@@ -39,9 +41,11 @@ const TypeVsPeriod = ({endpoint, range}) =>
                 setReportTypes([...allData.metaData.dimensions.dx]);
                 setPeriods([...allData.metaData.dimensions.pe]);
                 setRows([...allData.rows]);
+                setOrgUnits([...allData.metaData.dimensions.ou]);
             }
         },[allData]
     );
+
 
     //state variable that will hold sorted rows by type of report
     const [rowsPerReport, setRowsPerReport] = useState([]);
@@ -147,9 +151,8 @@ const TypeVsPeriod = ({endpoint, range}) =>
             let reportNamesDuplicate = [];
             reportTypes.forEach(
                 (reportType) => {
-                    console.log("report type:", reportType);
                     let start = reportType.indexOf(".") + 1;
-                    let reportName = reportType.slice(start, reportType.length + 1);
+                    let reportName = reportType.slice(start, reportType.length + 1).replace(/_/g, " ");
 
                     reportNamesDuplicate = [...reportNamesDuplicate, reportName];
                     
@@ -162,6 +165,8 @@ const TypeVsPeriod = ({endpoint, range}) =>
 
     //state variable to hold data that goes into a chart
     const [chartData, setChartData] = useState({labels: [], datasets: []});
+    //state variable that holds the human readable months
+    const [humanReadableMonths, setHumanReadableMonths] = useState([]);
 
     //populate the chart data state variable
     useEffect(
@@ -243,7 +248,8 @@ const TypeVsPeriod = ({endpoint, range}) =>
                     dataSet = {label: [], data: [], backgroundColor: ''};
                 }
             );
-
+            
+            setHumanReadableMonths([...humanReadableMonthsDuplicate]);
             chartDataDuplicate.labels = [...humanReadableMonthsDuplicate];
             chartDataDuplicate.datasets = [...dataSetsDuplicate];
             setChartData(chartDataDuplicate);
@@ -251,7 +257,8 @@ const TypeVsPeriod = ({endpoint, range}) =>
         }, [ ratesPerReport]
     );
     
-    const [name, setName] = useState('')
+    const [name, setName] = useState('');
+
     useEffect(
         () => {
             let url =  `dataSets/${reportTypes[0]}`;
@@ -270,9 +277,9 @@ const TypeVsPeriod = ({endpoint, range}) =>
             )
 
         },[reportTypes]
-    )
+    );
 
-    //options for the table then
+    //options for the chart then
     const chartOptions = {
         maintainAspectRatio: true,
         title : {
@@ -282,12 +289,85 @@ const TypeVsPeriod = ({endpoint, range}) =>
         },
       }
 
+    //state variable that holds the names of the org units
+    const [orgNames, setOrgNames] = useState([]);
+
+    //populate the org names once the org units have been fetched
+    useEffect(
+        () => {
+            if(orgUnits.length){
+                let orgNamesDuplicate = [];
+                orgUnits.forEach(
+                    orgUnit => {
+                        let url = `organisationUnits/${orgUnit}`;
+    
+                        fetch(url, {
+                            headers: {
+                                Authorization: `Basic ${btoa('albertagoya@gmail.com:Pa$$word1')}`,
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(
+                            result => {
+                                orgNamesDuplicate = [...orgNamesDuplicate, result.displayName];
+                                setOrgNames([...orgNamesDuplicate]);
+                            }
+                        )
+                    }
+                );
+            }
+        }, [name]
+    );
+
+    //state variable that holds the table's body
+    const [tableBody, setTableBody] = useState(null);
+    
+    //create the table body when ready
+    useEffect(
+        () => {
+            if(humanReadableMonths.length){
+                let tableBodyDuplicate = humanReadableMonths.map(
+                    (month, monthIndex) => {
+                        return(
+                            <tr>
+                                <td>{month}</td>
+                                {reportTypes.map((report, reportIndex) => <td style={{textAlign: 'center'}}>{ratesPerReport[reportIndex][monthIndex]}</td>)}
+                            </tr>
+                        )
+                    }
+                )
+
+                setTableBody(tableBodyDuplicate);
+            }
+        },[orgNames]
+    );
+
     return(
         <>
-            <Line
+            {display === "chart" &&
+                <Line
                 data={chartData}
                 options={chartOptions}
-            />
+                />
+            }
+            {display === "table" &&
+                <div className="table-responsive">
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th colspan={reportTypes.length + 1} style={{textAlign: 'center'}}>{name} For {orgNames.map((orgName, index )=> `${orgName}${index === orgNames.length - 1 ? '' : ' and '} `)}</th>
+                            </tr>
+                            <tr>
+                                <th>PERIOD</th>
+                                {reportNames.map(report => <th  style={{textAlign: 'center'}}>{report}</th>)}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {tableBody}
+                        </tbody>
+                    </table>
+                </div>
+            }
         </>
     )
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { HorizontalBar } from 'react-chartjs-2';
 
-const ValueVsCommodity = ({endpoint, name}) => {
+const ValueVsCommodity = ({endpoint, name, display}) => {
 
     //state variable to hold all incoming data from dhis
     const [allData, setAllData] = useState({});
@@ -296,12 +296,63 @@ const ValueVsCommodity = ({endpoint, name}) => {
         },
       }
 
+    //state variable to hold table body
+    const [tableBody, setTableBody] = useState();
+
+    //populate the table body state variable when everything is ready
+    useEffect(
+        () => {
+            
+            if(orgNames.length){
+                let bodyDuplicate = orgNames.map(
+                    (org, orgIndex) => {
+                        return(
+                            <tr>
+                                <td>{org}</td>
+                                {commoditiesNames.map(
+                                    (commodity, commodityIndex) => {
+                                        return(
+                                            <td style={{textAlign: 'center'}}>{ratesPerOrg[orgIndex][commodityIndex]}</td>
+                                        )
+                                    }
+                                )}
+                            </tr>
+                        )
+                    }
+                );
+                
+                setTableBody(bodyDuplicate);
+            }
+
+        },[chartData]
+    );
+
     return(
         <>
-        <HorizontalBar
-        data={chartData}
-        options={chartOptions}
-        />
+            {display === "chart" &&
+            <HorizontalBar
+            data={chartData}
+            options={chartOptions}
+            />
+            }
+            {display === "table" &&
+            <div className="table-responsive">
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th colSpan={commoditiesNames.length+1} style={{textAlign: 'center'}}>{`${name} For ${humanReadableMonth}`}</th>
+                        </tr>
+                        <tr>
+                            <th style={{textAlign: 'center'}}>Organisation Unit</th>
+                            {commoditiesNames.map(commodity => <th>{commodity}</th>)}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {tableBody}
+                    </tbody>
+                </table>
+            </div>
+            }
         </>
     )
 }
