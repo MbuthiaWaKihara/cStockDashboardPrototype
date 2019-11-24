@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 
-const TypeVsPeriod = () =>
+const TypeVsPeriod = ({endpoint, range}) =>
 {
     //state variable to hold all incoming data from dhis
     const [allData, setAllData] = useState({});
@@ -9,7 +9,7 @@ const TypeVsPeriod = () =>
     //fetch all data from dhis
     useEffect(
         () => {
-            let url = `26/analytics.json?dimension=dx:ozYIEpvgLnb.REPORTING_RATE;ozYIEpvgLnb.REPORTING_RATE_ON_TIME&dimension=ou:USER_ORGUNIT&dimension=pe:LAST_6_MONTHS&displayProperty=NAME&user=Fsw9jvRNAGL&outputIdScheme=UID`;
+            let url = endpoint;
     
             fetch(url, {
                 headers: {
@@ -124,7 +124,7 @@ const TypeVsPeriod = () =>
                 report => {
                     report.forEach(
                         reportRow => {
-                            currentRates = [...currentRates, reportRow[3]];
+                            currentRates = [...currentRates, reportRow[2]];
                         }
                     );
 
@@ -250,21 +250,38 @@ const TypeVsPeriod = () =>
             
         }, [ ratesPerReport]
     );
+    
+    const [name, setName] = useState('')
+    useEffect(
+        () => {
+            let url =  `dataSets/${reportTypes[0]}`;
+            fetch(url, {
+                headers: {
+                    Authorization: `Basic ${btoa('albertagoya@gmail.com:Pa$$word1')}`,
+                }
+            })
+            .then(
+                response => response.json()
+            )
+            .then(
+                result => {
+                    setName(result.displayName);
+                }
+            )
+
+        },[reportTypes]
+    )
 
     //options for the table then
     const chartOptions = {
         maintainAspectRatio: true,
         title : {
             display: true,
-            text : `Something`,
+            text : `${name} For The Last ${ range === '1' ? 'Month' : range } ${range === '1' ? '': 'Months'}`,
             fontSize : '25',
         },
       }
 
-    console.log("all data:", allData);
-    console.log("rows", rows);
-    console.log("sorted rows:", sortedRowsPerReport);
-    console.log("rates per report:", ratesPerReport);
     return(
         <>
             <Line

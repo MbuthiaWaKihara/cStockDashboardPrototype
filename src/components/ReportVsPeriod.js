@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { HorizontalBar, Line } from 'react-chartjs-2';
 
-const RateVsPeriod = ({months, range, name}) => 
+const ReportVsPeriod = ({months, range, name, display}) => 
 {
     //state variable to hold all incoming data from dhis
     const [allData, setAllData] = useState({});
@@ -32,7 +32,7 @@ const RateVsPeriod = ({months, range, name}) =>
     //state variable that holds the period sorted from earliest to latest
     const [periods, setPeriods] = useState([]);
     //state variable that holds the chart title
-    const [chartTitle, setChartTitle] = useState('');
+    const [title, setTitle] = useState('');
 
     //set the rows and org units when the all data state is updated
     useEffect(
@@ -49,7 +49,7 @@ const RateVsPeriod = ({months, range, name}) =>
                 )
                 .then(
                     result => {
-                        setChartTitle(result.name)
+                        setTitle(result.displayName)
                         setAllRows([...allData.rows]);
                         setOrgUnits([...allData.metaData.dimensions.ou]);
                         setPeriods([...allData.metaData.dimensions.pe]);
@@ -175,8 +175,38 @@ const RateVsPeriod = ({months, range, name}) =>
         }, [rowsPerOrg]
     );
 
+    //state variable that holds the sorted report values
+    const [sortedValues, setSortedValues] = useState([]);
+
+    //populate the sorted report values state variable
+    useEffect(
+        () => {
+            let sortedValuesDuplicate = [];
+            let currentRates = [];
+            let sortedRowsPerOrgDuplicate = sortedRowsPerOrg;
+
+           if(sortedRowsPerOrgDuplicate.length){
+            sortedRowsPerOrgDuplicate.forEach(
+                orgUnit => {
+                    orgUnit.forEach(
+                        row => {
+                            currentRates = [...currentRates, row[3]]
+                        }
+                    );
+
+                    sortedValuesDuplicate = [...sortedValuesDuplicate, currentRates];
+                    currentRates = [];
+                }
+            );
+           }
+           setSortedValues([...sortedValuesDuplicate]);
+        }, [sortedRowsPerOrg]
+    );
+
      //state variable that holds the data for a line chart
      const [lineData, setLineData] = useState({});
+     //state variable that holds the names of the formatted months
+     const [formattedMonths, setFormattedMoths] = useState([]);
 
      //populate the line chart state variable
      useEffect(
@@ -241,7 +271,8 @@ const RateVsPeriod = ({months, range, name}) =>
                  }
              );
  
-             holdChartData.labels = [...formattedMonths]
+             holdChartData.labels = [...formattedMonths];
+             setFormattedMoths([...formattedMonths]);
  
              let holdRows = sortedRowsPerOrg
              holdRows.forEach(
@@ -281,24 +312,77 @@ const RateVsPeriod = ({months, range, name}) =>
         maintainAspectRatio: true,
         title : {
             display: true,
-            text : `${chartTitle} For The Last ${months === 1 ? '' : months} ${months === 1 ? 'Month' : 'Months'}`,
+            text : `${title} For The Last ${months === 1 ? '' : months} ${months === 1 ? 'Month' : 'Months'}`,
             fontSize : '25',
         },
       }
 
+    //state variable that will hold the body of the table
+    const [tableBody, setTableBody] = useState([]);
+    
+    //create a table body
+    useEffect(
+        () => {   
+           if(orgNames.length){
+            let tableBodyDuplicate = [];
+            orgNames.forEach(
+                (orgName, orgIndex) => {
+                    
+                    let currentDisplayRow
+                    if(formattedMonths.length && sortedValues.length){ 
+                         currentDisplayRow = formattedMonths.map(
+                            (month, monthIndex)=> {
+                                return(
+                                    <tr key={monthIndex}>
+                                        {monthIndex === 0 && <td rowSpan={formattedMonths.length} style={{textAlign: 'center'}}>{orgName}</td>}
+                                        <td>{month}</td>
+                                        <td style={{textAlign: 'center'}}>{sortedValues[orgIndex][monthIndex]}</td>
+                                    </tr>
+                                )
+                            }
+                        );
+                    }
+
+                    tableBodyDuplicate = [...tableBodyDuplicate, currentDisplayRow];
+                    console.log("what's this: ", tableBodyDuplicate);
+                    setTableBody([...tableBodyDuplicate]);
+                    currentDisplayRow = null;
+                }
+            );
+             
+           }
+        },[lineData, formattedMonths, sortedValues]
+    );
+
+
+    console.log("sorted rows per org unit: ", sortedRowsPerOrg);
+    console.log("sorted values", sortedValues);
+
     return(
         <>
-           {months === 1 ? 
-             <HorizontalBar 
-             data={lineData}  
-             options={lineOptions}
-             />:
-             <Line 
-             data={lineData}  
-             options={lineOptions}
-             />}
+           {display === "chart" && 
+            <Line 
+            data={lineData}  
+            options={lineOptions}
+            />
+           }
+           {
+            display === "table" &&
+            <div className="table-responsive">
+                <table className="table">
+                    <thead>
+                        <th>Organisation Unit</th>
+                        <th>Period</th>
+                        <th>{title}</th>
+                    </thead>
+                    <tbody>
+                        {tableBody.map( row => <>{row}</>)}
+                    </tbody>
+                </table>
+            </div>
+           }
         </>
     )
 }
 
-export default React.memo(RateVsPeriod);
+export default React.memo(ReportVsPeriod);
