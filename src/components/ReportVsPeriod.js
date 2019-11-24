@@ -327,7 +327,6 @@ const ReportVsPeriod = ({months, range, name, display}) =>
             let tableBodyDuplicate = [];
             orgNames.forEach(
                 (orgName, orgIndex) => {
-                    
                     let currentDisplayRow
                     if(formattedMonths.length && sortedValues.length){ 
                          currentDisplayRow = formattedMonths.map(
@@ -344,7 +343,6 @@ const ReportVsPeriod = ({months, range, name, display}) =>
                     }
 
                     tableBodyDuplicate = [...tableBodyDuplicate, currentDisplayRow];
-                    console.log("what's this: ", tableBodyDuplicate);
                     setTableBody([...tableBodyDuplicate]);
                     currentDisplayRow = null;
                 }
@@ -353,10 +351,6 @@ const ReportVsPeriod = ({months, range, name, display}) =>
            }
         },[lineData, formattedMonths, sortedValues]
     );
-
-
-    console.log("sorted rows per org unit: ", sortedRowsPerOrg);
-    console.log("sorted values", sortedValues);
 
     return(
         <>

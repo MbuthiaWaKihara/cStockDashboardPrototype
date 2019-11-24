@@ -61,6 +61,7 @@ const App = () =>
 
     return(
        <>
+       <h1>Report Vs Period</h1>
        <div className="container container-fluid">
             {/* <div>
                 <select onChange={changePeriod}>
@@ -128,6 +129,7 @@ const App = () =>
             </div>
        </div>
        <hr />
+       <h1>Type vs Period</h1>
        <div className="container container-fluid">
              <div style={{
                 width: '100%',
@@ -151,6 +153,7 @@ const App = () =>
             </div>
        </div>
        <hr />
+       <h1>Value Vs Commodity</h1>
        <div className="container container-fluid">
             <div style={{
                 width: '100%',
