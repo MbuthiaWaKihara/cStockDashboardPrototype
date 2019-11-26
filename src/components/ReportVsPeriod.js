@@ -298,7 +298,7 @@ const ReportVsPeriod = ({months, range, name, display}) =>
                      let G = Math.floor(Math.random() * 255 ) + 1;
                      let B = Math.floor(Math.random() * 255 ) + 1;
                      let opacity = Math.floor(Math.random() * 5 ) + 1;
-                     singleOrgUnitData.backgroundColor = `rgba(${R},${G},${B},.${opacity})`;
+                     singleOrgUnitData.backgroundColor = `rgba(${R},${G},${B}, .${opacity})`;
                      holdChartData.datasets = [...holdChartData.datasets, singleOrgUnitData];
                  }
              );

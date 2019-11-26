@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import ReportVsPeriod from './ReportVsPeriod';
 import ValueVsCommodity from './ValueVsCommodity';
 import TypeVsPeriod from './TypeVsPeriod';
+// import Indicator from './Indicator';
+import TypeVsOrg from './TypeVsOrg';
 
 const App = () =>
 {
@@ -61,7 +63,8 @@ const App = () =>
 
     return(
        <>
-       <h1>Report Vs Period</h1>
+       {/* <Indicator /> */}
+       <h1 style={{textAlign: 'center'}}>Report Vs Period</h1>
        <div className="container container-fluid">
             {/* <div>
                 <select onChange={changePeriod}>
@@ -89,7 +92,7 @@ const App = () =>
                         <ReportVsPeriod 
                         months={period.months}
                         range={period.range}
-                        name="ozYIEpvgLnb.REPORTING_RATE"
+                        name="z2slLbjn7PM.REPORTING_RATE"
                         display="table"
                     />}
                     </div>
@@ -122,14 +125,14 @@ const App = () =>
                         <ReportVsPeriod 
                         months={period.months}
                         range={period.range}
-                        name="ozYIEpvgLnb.REPORTING_RATE"
+                        name="z2slLbjn7PM.REPORTING_RATE"
                         display="chart"
                     />}
                     </div>
             </div>
        </div>
        <hr />
-       <h1>Type vs Period</h1>
+       <h1 style={{textAlign: 'center'}}>Type vs Period</h1>
        <div className="container container-fluid">
              <div style={{
                 width: '100%',
@@ -177,7 +180,7 @@ const App = () =>
             </div>
        </div>
        <hr />
-       <h1>Value Vs Commodity</h1>
+       <h1 style={{textAlign: 'center'}}>Value Vs Commodity</h1>
        <div className="container container-fluid">
             <div style={{
                 width: '100%',
@@ -224,6 +227,54 @@ const App = () =>
                     </div>
             </div>
        </div>
+       <hr />
+       <h1 style={{textAlign: 'center'}}>Type Vs Org</h1>
+       <div className="container container-fluid">
+            <div style={{
+                width: '100%',
+                heigth: '100%'
+                }}>
+                    <div style={{
+                        borderLeft: '1px solid #575859',
+                        borderBottom: '2px solid #575859',
+                        borderRadius: '5px',
+                        width: '100%',
+                        height: '100%',
+                        margin: '10px',
+                        backgroundColor: '#ffffff',
+                        padding: '5px',
+                    }}>
+                        <TypeVsOrg
+                        endpoint={`26/analytics.json?dimension=dx:z2slLbjn7PM.EXPECTED_REPORTS;z2slLbjn7PM.ACTUAL_REPORTS;z2slLbjn7PM.ACTUAL_REPORTS_ON_TIME&dimension=ou:USER_ORGUNIT&dimension=pe:LAST_MONTH&displayProperty=NAME&user=Fsw9jvRNAGL&outputIdScheme=UID`}
+                        name="CHV Commodity Dispensed"
+                        display="table"
+                        />
+                    </div>
+            </div>
+        </div>
+       <div className="container container-fluid">
+            <div style={{
+                width: '100%',
+                heigth: '100%'
+                }}>
+                    <div style={{
+                        borderLeft: '1px solid #575859',
+                        borderBottom: '2px solid #575859',
+                        borderRadius: '5px',
+                        width: '100%',
+                        height: '100%',
+                        margin: '10px',
+                        backgroundColor: '#ffffff',
+                        padding: '5px',
+                    }}>
+                        <TypeVsOrg
+                        endpoint={`26/analytics.json?dimension=dx:z2slLbjn7PM.EXPECTED_REPORTS;z2slLbjn7PM.ACTUAL_REPORTS;z2slLbjn7PM.ACTUAL_REPORTS_ON_TIME&dimension=ou:USER_ORGUNIT&dimension=pe:LAST_MONTH&displayProperty=NAME&user=Fsw9jvRNAGL&outputIdScheme=UID`}
+                        name="CHV Commodity Dispensed"
+                        display="chart"
+                        />
+                    </div>
+            </div>
+        </div>
        </>
     )
 }

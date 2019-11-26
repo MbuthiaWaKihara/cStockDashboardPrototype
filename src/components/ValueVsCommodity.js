@@ -141,8 +141,9 @@ const ValueVsCommodity = ({endpoint, name, display}) => {
     //populate the commodities names state variable
     useEffect(
         () => {
+            let commoditiesNamesDuplicate = [];
             commodities.forEach(
-                commodity => {
+                (commodity, index) => {
                     let url = `dataElements/${commodity}`;
     
                     fetch(url, {
@@ -153,11 +154,8 @@ const ValueVsCommodity = ({endpoint, name, display}) => {
                     .then(response => response.json())
                     .then(
                         result => {
-                            setCommoditiesNames(
-                                previousCommoditiesNames => {
-                                    return([...previousCommoditiesNames, result.displayName]);
-                                }
-                            );
+                            commoditiesNamesDuplicate[index] = result.displayName;
+                            setCommoditiesNames(commoditiesNamesDuplicate);                        
                         }
                     )
                 }
